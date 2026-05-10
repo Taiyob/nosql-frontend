@@ -7,7 +7,15 @@
     <title>frontend</title>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; background: #0f172a; color: white; font-family: sans-serif;">
+        <div style="width: 48px; height: 48px; border: 5px solid #6366f1; border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+        <div style="font-weight: 600; letter-spacing: 1px; opacity: 0.8;">LOADING NOTESPRO</div>
+        <style>
+          @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        </style>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
