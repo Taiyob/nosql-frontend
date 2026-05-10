@@ -4,22 +4,27 @@ import { useNavigate, Link } from 'react-router-dom';
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 import { LogIn } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [error, setError] = React.useState('');
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const onSubmit = async (data: any) => {
     try {
+      setIsSubmitting(true);
       const response = await api.post('/auth/login', data);
       if (response.data.success) {
         login(response.data.data.accessToken);
+        toast.success('Welcome back!', { id: 'login-success' });
         navigate('/notes');
       }
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Login failed');
+      toast.error(err.response?.data?.message || 'Login failed', { id: 'login-error' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -67,10 +72,9 @@ const LoginPage = () => {
             {errors.password && <p style={{ color: 'var(--danger)', fontSize: '0.75rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>{errors.password.message as string}</p>}
           </div>
 
-          {error && <div style={{ color: 'var(--danger)', marginBottom: '1rem', textAlign: 'center', fontSize: '0.875rem' }}>{error}</div>}
 
-          <button type="submit" className="primary" style={{ width: '100%' }}>
-            Sign In
+          <button type="submit" className="primary" disabled={isSubmitting} style={{ width: '100%' }}>
+            {isSubmitting ? 'Signing In...' : 'Sign In'}
           </button>
           <div style={{ textAlign: 'center', marginTop: '1rem' }}>
             <Link to="/forget-password" style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textDecoration: 'none' }}>

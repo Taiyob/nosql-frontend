@@ -1,8 +1,10 @@
 import axios from "axios";
 
+// const api = axios.create({
+//   baseURL: 'http://localhost:5000/api/v1', // Update this based on your backend URL
+// });
 const api = axios.create({
-  baseURL: "http://localhost:5000/api/v1", // Update this based on your backend URL
-  withCredentials: true,
+  baseURL: 'https://backend-pro-seven.vercel.app/api/v1', // Update this based on your backend URL
 });
 
 api.interceptors.request.use((config) => {

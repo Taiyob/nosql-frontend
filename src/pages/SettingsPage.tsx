@@ -1,25 +1,29 @@
-import React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import api from '../api/axiosConfig';
 import { useAuth } from '../context/AuthContext';
 import { Shield, Key, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const SettingsPage = () => {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [message, setMessage] = React.useState({ type: '', text: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onPasswordChange = async (data: any) => {
     try {
+      setIsSubmitting(true);
       const response = await api.post('/auth/change-password', data);
       if (response.data.success) {
-        setMessage({ type: 'success', text: 'Password changed successfully!' });
+        toast.success('Password changed successfully!', { id: 'change-password' });
         reset();
       }
     } catch (err: any) {
-      setMessage({ type: 'error', text: err.response?.data?.message || 'Failed to change password' });
+      toast.error(err.response?.data?.message || 'Failed to change password', { id: 'change-password' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -58,15 +62,6 @@ const SettingsPage = () => {
               <Key size={20} /> Change Password
             </h4>
 
-            {message.text && (
-              <div style={{ 
-                padding: '1rem', borderRadius: '0.5rem', marginBottom: '1.5rem', fontSize: '0.875rem',
-                background: message.type === 'success' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(239, 68, 68, 0.1)',
-                color: message.type === 'success' ? '#10b981' : '#ef4444'
-              }}>
-                {message.text}
-              </div>
-            )}
 
             <form onSubmit={handleSubmit(onPasswordChange)}>
               <label>Current Password</label>
@@ -88,8 +83,8 @@ const SettingsPage = () => {
               />
               {errors.newPassword && <p style={{ color: 'var(--danger)', fontSize: '0.75rem', marginTop: '-0.75rem', marginBottom: '1rem' }}>{errors.newPassword.message as string}</p>}
 
-              <button type="submit" className="primary" style={{ marginTop: '1rem' }}>
-                Update Password
+              <button type="submit" className="primary" style={{ marginTop: '1rem' }} disabled={isSubmitting}>
+                {isSubmitting ? 'Updating...' : 'Update Password'}
               </button>
             </form>
           </div>

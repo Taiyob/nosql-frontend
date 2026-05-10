@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import api from '../api/axiosConfig';
 import { type User } from '../types';
 
@@ -21,6 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const initAuth = async () => {
       if (token) {
+        setIsLoading(true);
         try {
           const response = await api.get('/users/me');
           if (response.data.success) {
@@ -29,15 +29,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } catch (error) {
           console.error('Failed to fetch user profile:', error);
           logout();
+        } finally {
+          setIsLoading(false);
         }
+      } else {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
     initAuth();
   }, [token]);
 
   const login = (newToken: string) => {
     localStorage.setItem('accessToken', newToken);
+    setIsLoading(true); // Set synchronously to prevent redirect race
     setToken(newToken);
   };
 

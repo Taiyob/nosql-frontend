@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import api from '../api/axiosConfig';
 import { Mail, ArrowLeft } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const ForgetPasswordPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();

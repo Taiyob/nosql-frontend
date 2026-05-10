@@ -6,6 +6,7 @@ export interface User {
   email: string;
   role: Role;
   interests: string[];
+  status: 'in-progress' | 'blocked';
 }
 
 export interface Note {
@@ -15,6 +16,7 @@ export interface Note {
   user: string | User;
   createdAt: string;
   updatedAt: string;
+  isPublic?: boolean;
 }
 
 export interface Post {
