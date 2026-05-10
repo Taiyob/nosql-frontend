@@ -17,8 +17,9 @@ const ProtectedRoute = ({ children, adminOnly = false }: { children: React.React
 
   // If we're loading and have a token, we must wait for the user profile
   if (isLoading && token) return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', background: 'var(--bg)' }}>
-      <div className="animate-spin" style={{ width: '40px', height: '40px', border: '3px solid var(--primary)', borderTopColor: 'transparent', borderRadius: '50%' }}></div>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '100vh', background: 'var(--bg)', color: 'var(--text)' }}>
+      <div className="animate-spin" style={{ width: '48px', height: '48px', border: '4px solid var(--primary)', borderTopColor: 'transparent', borderRadius: '50%', marginBottom: '1.5rem' }}></div>
+      <p style={{ fontWeight: 600, letter-spacing: '1px', opacity: 0.8 }}>AUTHENTICATING...</p>
     </div>
   );
 
